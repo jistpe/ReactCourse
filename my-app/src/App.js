@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import './App.css';
 import Person from './Person/Person';
-import Validation from './ValidationComponent/ValidationComponent'
+
+const StyledButton = styled.button`
+  background-color: ${props => props.alt ? 'red' : 'green'};
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
+    color: black;
+  }
+`;
 
 class App extends Component  {
   state = { 
@@ -10,12 +24,10 @@ class App extends Component  {
       { id: 2,name: 'João', age: 50 },
       { id: 3,name: 'Pedro', age: 23 }
     ], 
-    showPersons: false,
-    txtLength: ''
+    showPersons: false
   };
 
   deletePersonHandler = (personIndex) => {
-    // const persons = this.state.persons.slice();
     const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
     this.setState({persons: persons});
@@ -40,13 +52,7 @@ class App extends Component  {
     this.setState({ persons: persons });
   }
 
-  inputLenght = (event) => {
-    const txt = event.target.value;
-    this.setState({txtLength: txt.length});
-  }
-
   render() {
-
   let persons = null;
 
   if(this.state.showPersons){
@@ -63,14 +69,19 @@ class App extends Component  {
     );
   }
 
+  let classes = [];
+  if(this.state.persons.length <= 2){
+    classes.push('red');
+  }
+  if(this.state.persons.length <= 1){
+    classes.push('bold');
+  }
+
   return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
-        <p>This is really working!</p>
-        <input onChange={ this.inputLenght }/>
-        <p>{ this.state.txtLength }</p>
-        <Validation length={ this.state.txtLength }/><br/>
-        <button onClick={ this.tooglePersonsHandler }>Switch Name</button>
+        <p className={classes.join(' ')}>This is really working!</p>
+        <button className='button' alt={this.state.showPersons} onClick={ this.tooglePersonsHandler }>Toggle Name</button>
         {persons}
 
       </div>
