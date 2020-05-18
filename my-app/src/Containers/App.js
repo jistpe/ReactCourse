@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import classes from './App.css';
-import Person from './Person/Person';
+import Persons from '../Components/Persons/Persons';
+import Cockpit from '../Components/Cockpit/Cockpit';
 
 class App extends Component  {
   state = { 
@@ -26,7 +27,7 @@ class App extends Component  {
 
   nameChangeHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex(p => {
-      return p.userId === id;
+      return p.id === id;
     });
     const person = {...this.state.persons[personIndex]};
 
@@ -39,40 +40,21 @@ class App extends Component  {
   }
 
   render() {
-  let persons = null;
-  let btnClass = [classes.Button];
-
-  if(this.state.showPersons){
-    persons = (
-      <div>
-        { this.state.persons.map((person, index) => {
-          return <Person name={person.name} 
-                         age={person.age} 
-                         click={() => this.deletePersonHandler(index)}
-                         key={person.id}
-                         changed={(event) => this.nameChangeHandler(event, person.id)}/>
-        })}
-      </div>
-    );
-
-    btnClass.push(classes.Red);
-  }
-
-  const assignedClasses = [];
-  if(this.state.persons.length <= 2){
-    assignedClasses.push(classes.red);
-  }
-  if(this.state.persons.length <= 1){
-    assignedClasses.push(classes.bold);
-  }
+    let persons = null;
+  
+    if(this.state.showPersons){
+      persons = (
+          <Persons 
+            persons={this.state.persons}
+            clicked={this.deletePersonHandler}
+            changed={this.nameChangeHandler}/>
+      );
+    }
 
   return (
       <div className={classes.App}>
-        <h1>Hi, I'm a React App</h1>
-        <p className={assignedClasses.join(' ')}>This is really working!</p>
-        <button className={btnClass.join(' ')} onClick={ this.tooglePersonsHandler }>Toggle Name</button>
+        <Cockpit persons={this.state.persons} showPersons={this.state.showPersons} clicked={this.tooglePersonsHandler}/>
         {persons}
-
       </div>
       // React.createElement('div', null, React.createElement('h1', {className: 'App'},'Hi, I\'m a React App!!!'))
     )
